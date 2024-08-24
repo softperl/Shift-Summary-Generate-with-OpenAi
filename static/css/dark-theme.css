@@ -1,0 +1,36 @@
+body.dark-mode {
+    background-color: #343a40;
+    color: #f8f9fa;
+}
+
+.dark-mode .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.dark-mode .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.dark-mode .form-control {
+    background-color: #495057;
+    border-color: #6c757d;
+    color: #f8f9fa;
+}
+
+.dark-mode .alert {
+    background-color: #343a40;
+    border-color: #6c757d;
+    color: #f8f9fa;
+}
+
+.dark-mode .alert-danger {
+    background-color: #bd2130;
+}
+
+.dark-mode .alert-success {
+    background-color: #28a745;
+}
+
+

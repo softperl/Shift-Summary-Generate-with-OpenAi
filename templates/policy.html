@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Policy Page</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        padding-top: 20px;
+      }
+      .footer {
+        padding: 20px;
+        background-color: #f8f9fa;
+      }
+      .policy-content {
+        margin-top: 20px;
+      }
+      .policy-title {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .btn-center {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 20px;
+      }
+      .btn-large {
+        width: 160px;
+        padding: 10px 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Main Content -->
+    <div class="container policy-content">
+      <div class="div">
+        <h3 class="policy-title" style="margin-bottom: 1px;">CareLogix Terms of Service (Beta Testing)</h3>
+        <p class="policy-title">Effective Date: August 21, 2024</p>
+      </div>
+        <p>
+            Welcome to CareLogix's Beta Testing Program! By participating in our
+            beta testing, you agree to the following terms.
+          </p>
+    
+          <h5>Participation in Beta Testing</h5>
+          <p>
+            1. Your use of CareLogix's beta software is subject to these Terms of
+            Service. The beta software is provided for testing purposes only and may
+            not be fully functional. <br />
+            2. You agree to provide feedback about the software, which CareLogix may
+            use for product improvement.
+          </p>
+    
+          <h5>Confidentiality</h5>
+          <p>
+            You agree to keep all information about the beta software confidential.
+            You will not disclose any details about the software to third parties
+            without written permission from CareLogix.
+          </p>
+    
+          <h5>No Warranties</h5>
+          <p>
+            The beta software is provided "as is" without any warranties of any
+            kind. CareLogix makes no guarantees regarding its functionality,
+            performance, or availability.
+          </p>
+          <h5>Limitation of Liability</h5>
+          <p>
+            CareLogix will not be liable for any damages arising from your use of
+            the beta software. Your participation is entirely voluntary and at your
+            own risk.
+          </p>
+          <h5>Termination</h5>
+          <p>
+            CareLogix may terminate your access to the beta software at any time
+            without notice.
+          </p>
+          <h5>Governing Law</h5>
+          <p>These terms are governed by the laws of the State of Missouri, USA.</p>
+    </div>
+
+    <div class="container policy-content">
+      <div class="div">
+        <h3 class="policy-title mt-5" style="margin-bottom: 1px;">CareLogix Privacy Policy (Beta Testing)</h3>
+        <p class="policy-title" >Effective Date: August 21, 2024</p>
+      </div>
+      <p>
+        CareLogix is committed to protecting your privacy during the beta
+        testing program. This Privacy Policy outlines how we handle your
+        information.
+      </p>
+
+      <h5>Information We Collect</h5>
+      <p>
+        1. During beta testing, we may collect information such as your name,
+        contact information, and feedback on the software. <br />
+        2. We may also collect technical data, such as device information and
+        usage statistics.
+      </p>
+
+      <h5>Use of Information</h5>
+      <p>
+        1. We use your information to improve the software and to communicate
+        with you about the beta testing program. <br />
+        Your feedback may be used to enhance future versions of the software.
+      </p>
+
+      <h5>Sharing of Information</h5>
+      <p>
+        We will not share your personal information with third parties unless
+        required by law.
+      </p>
+      <h5>Data Security</h5>
+      <p>
+        We take appropriate measures to protect your information, but please be
+        aware that no method of transmission over the internet is 100% secure.
+      </p>
+      <h5>Your Rights</h5>
+      <p>
+        You may request to review, correct, or delete your personal information
+        by contacting us at carelogix05@gmail.com.
+      </p>
+      <h5>Changes to This Policy</h5>
+      <p>
+        We may update this Privacy Policy from time to time, and we will notify
+        you of any changes.
+      </p>
+    </div>
+    {% if logged_in %}
+    <div class="btn-center mt-3 mb-5">
+      <form method="POST">
+        <button
+          type="submit"
+          name="action"
+          value="accept"
+          class="btn btn-large btn-success"
+        >
+          Accept
+        </button>
+        <button
+          type="submit"
+          name="action"
+          value="reject"
+          class="btn btn-large btn-danger"
+        >
+          Reject
+        </button>
+      </form>
+    </div>
+    {% endif %}
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>

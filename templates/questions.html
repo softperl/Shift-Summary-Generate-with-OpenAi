@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shift Questions</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard-style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dark-theme.css') }}" id="dark-theme-stylesheet">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <style>
+        .progress-bar {
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            border-radius: 20px;
+            height: 25px;
+            transition: width 0.5s ease-in-out;
+        }
+
+        .progress {
+            border-radius: 20px;
+            background-color: #e0e0e0;
+            margin-bottom: 20px;
+            height: 25px;
+        }
+
+        #theme-toggle {
+            margin-left: 20px;
+        }
+
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .btn-large {
+            width: 200px;
+            padding: 10px 20px;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body class="{{ 'dark-mode' if session.get('theme') == 'dark' else '' }}">
+<div class="container mt-4">
+    <div class="header-bar">
+        <h1>Shift Questions</h1>
+        <div>
+            <button id="theme-toggle" class="btn btn-secondary">
+                <i class="fas fa-sun"></i> <span class="sr-only">Toggle Dark Mode</span>
+            </button>
+        </div>
+    </div>
+    <div class="progress">
+        <div id="progress-bar" class="progress-bar bg-success" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+    </div>
+
+    <div class="content">
+        <form id="questions-form" method="POST" action="{{ url_for('questions', shift_id=shift_id) }}">
+            <input type="hidden" name="questions" value='{{ questions|tojson }}'>
+            <input type="hidden" name="current_question" value="{{ current_question }}">
+
+            <div class="form-group">
+                <label for="answer_{{ current_question }}">{{ question }}</label>
+                <input type="text" id="answer_{{ current_question }}" name="answer" class="form-control answer" value="{{ answer|default('') }}">
+
+                <div id="error-message" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                {% if current_question < (total_questions - 1) %}
+                    <button type="submit" id="next-button" name="action" value="next" class="btn btn-large btn-primary">
+                        Next
+                    </button>
+                    <button type="submit" id="save-button" name="action" value="save" class="btn btn-large btn-info">Save Progress</button>
+                {% else %}
+                    <button type="submit" id="finish-button" name="action" value="finish" class="btn btn-large btn-success">
+                        Finish
+                    </button>
+                {% endif %}
+                {% if current_question > 0 %}
+                    <button type="submit" name="action" value="previous" class="btn btn-large btn-secondary">Previous</button>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const toggleButton = document.getElementById('theme-toggle');
+        const progressBar = document.getElementById('progress-bar');
+        const form = document.getElementById('questions-form');
+        const errorMessage = document.getElementById('error-message');
+        const nextButton = document.getElementById('next-button');
+        const saveButton = document.getElementById('save-button');
+        const finishButton = document.getElementById('finish-button');
+
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            toggleButton.innerHTML =
+                '<i class="fas fa-moon"></i> <span class="sr-only">Toggle Light Mode</span>';
+        }
+
+        toggleButton.addEventListener('click', function () {
+            const isDarkMode = document.body.classList.toggle('dark-mode');
+            const newTheme = isDarkMode ? 'dark' : 'light';
+            localStorage.setItem('theme', newTheme);
+            setTheme(newTheme);
+            toggleButton.innerHTML = isDarkMode
+                ? '<i class="fas fa-moon"></i> <span class="sr-only">Toggle Light Mode</span>'
+                : '<i class="fas fa-sun"></i> <span class="sr-only">Toggle Dark Mode</span>';
+        });
+
+        function setTheme(theme) {
+            fetch('/set_theme', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ theme: theme })
+            });
+        }
+
+        function animateProgress(fromPercentage, toPercentage) {
+            const increment = toPercentage > fromPercentage ? 1 : -1;
+            const stepTime = 10;
+            let currentPercentage = fromPercentage;
+            const animate = () => {
+                currentPercentage += increment;
+                progressBar.style.width = `${currentPercentage}%`;
+                progressBar.setAttribute('aria-valuenow', currentPercentage);
+                progressBar.textContent = `${currentPercentage}%`;
+
+                if ((increment > 0 && currentPercentage < toPercentage) || (increment < 0 && currentPercentage > toPercentage)) {
+                    setTimeout(animate, stepTime);
+                }
+            };
+
+            animate();
+        }
+
+        function updateProgress() {
+            const currentQuestion = parseInt('{{ current_question }}', 10);
+            const totalQuestions = parseInt('{{ total_questions }}', 10);
+            const previousPercentage = Math.round((currentQuestion / totalQuestions) * 100);
+            const newPercentage = Math.round(((currentQuestion + 1) / totalQuestions) * 100);
+
+            animateProgress(previousPercentage, newPercentage);
+        }
+
+        updateProgress();
+
+        function validateForm() {
+            const answerInput = document.getElementById('answer_{{ current_question }}');
+            if (!answerInput.value.trim()) {
+                errorMessage.textContent = 'Please provide an answer before proceeding.';
+                return false;
+            } else {
+                errorMessage.textContent = ''; 
+                return true;
+            }
+        }
+
+        function handleButtonClick(buttonId, event) {
+            if (!validateForm()) {
+                event.preventDefault(); 
+            }
+        }
+
+        if (nextButton) {
+            nextButton.addEventListener('click', function (event) {
+                handleButtonClick('next-button', event);
+            });
+        }
+
+        if (saveButton) {
+            saveButton.addEventListener('click', function (event) {
+                handleButtonClick('save-button', event);
+            });
+        }
+
+        if (finishButton) {
+            finishButton.addEventListener('click', function (event) {
+                handleButtonClick('finish-button', event);
+            });
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="description" content="Login to your account" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Login - Carelogix</title>
+    <link
+      rel="shortcut icon"
+      href="/static/images/favicon.svg"
+      type="image/svg+xml"
+    />
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/css/lineicons.css" />
+    <link rel="stylesheet" href="/static/css/tiny-slider.css" />
+    <link rel="stylesheet" href="/static/css/glightbox.min.css" />
+    <link rel="stylesheet" href="static/css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+        font-family: "Roboto", sans-serif;
+        color: #343a40;
+      }
+      .card {
+        border-radius: 15px;
+        overflow: hidden;
+      }
+      .card-body {
+        padding: 2rem;
+        background-color: #ffffff;
+        color: #333;
+        border-radius: 15px;
+      }
+      .card-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #343a40;
+      }
+      .form-label {
+        font-weight: 500;
+        color: #495057;
+      }
+      .form-control {
+        border-radius: 10px;
+        border: 1px solid #ced4da;
+        padding: 0.75rem 1.25rem;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      }
+      .form-control::placeholder {
+        color: #6c757d;
+        opacity: 1;
+      }
+      .btn-primary {
+        background-color: #007bff;
+        border: none;
+        border-radius: 10px;
+        padding: 0.75rem;
+        font-size: 1rem;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      .btn-primary:hover {
+        background-color: #0ba44b;
+        color: #ffffff;
+      }
+      .text-center p {
+        font-size: 0.875rem;
+      }
+      .text-center a {
+        color: #007bff;
+        font-weight: 500;
+        text-decoration: none;
+      }
+      .text-center a:hover {
+        text-decoration: underline;
+      }
+      @media (max-width: 768px) {
+        .card {
+          margin: 1rem;
+        }
+      }
+      .form-group {
+        position: relative;
+      }
+      .form-control {
+        padding-right: 2.5rem; /* Space for the icon */
+      }
+      .form-control-icon {
+        position: absolute;
+        top: 50%;
+        right: 0.75rem;
+        transform: translateY(-50%);
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row justify-content-center align-items-center vh-100">
+        <div class="col-md-8 col-lg-6">
+          <div class="card shadow-lg">
+            <div class="card-body">
+              <h3 class="card-title text-center">Login</h3>
+              <form method="POST" action="/login">
+                {{ form.hidden_tag() }}
+                <div class="mb-3">
+                  {{ form.email.label(class="form-label") }} {{
+                  form.email(class="form-control", placeholder="Enter your email") }} {% for error in form.email.errors %}
+                  <div class="text-danger">{{ error }}</div>
+                  {% endfor %}
+                </div>
+                <div class="mb-3">
+                  {{ form.password.label(class="form-label") }}
+                  <div class="form-group">
+                    {{ form.password(class="form-control", id="passwordField",
+                    placeholder="Enter your password") }}
+                    <i
+                      class="fas fa-eye form-control-icon"
+                      id="togglePassword"
+                    ></i>
+                  </div>
+                  {% for error in form.password.errors %}
+                  <div class="text-danger">{{ error }}</div>
+                  {% endfor %}
+                </div>
+                <button type="submit" class="btn btn-primary w-100">
+                  Login
+                </button>
+                <div class="text-center mt-3 mt-2">
+                  <p>
+                    Create an account?
+                    <a href="{{ url_for('signup') }}">Signup</a> |
+                    <a href="{{ url_for('forgot_password') }}">Forgot Password?</a>
+                  </p>
+                </div>
+                {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                <div class="alert alert-{{ messages[0][0] }} mt-3">
+                  {{ messages[0][1] }}
+                </div>
+                {% endif %} {% endwith %}
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
+    <script>
+      document
+        .getElementById("togglePassword")
+        .addEventListener("click", function () {
+          const passwordField = document.getElementById("passwordField");
+          const type =
+            passwordField.getAttribute("type") === "password"
+              ? "text"
+              : "password";
+          passwordField.setAttribute("type", type);
+          this.classList.toggle("fa-eye-slash");
+        });
+    </script>
+  </body>
+</html>
