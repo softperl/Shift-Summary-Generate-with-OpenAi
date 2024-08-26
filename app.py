@@ -32,7 +32,7 @@ app.config['MAIL_USE_SSL'] = False
 mail = Mail(app)
 
 # Configure OpenAI
-client = OpenAI(api_key="sk-None-1Cr4bXSrUZbQwSrc3tMPT3BlbkFJGmIyuu7oZLhsNwmlkyDw")
+client = OpenAI(api_key="sk-k19opYJHI2tCUPzi6XQp8dspTjHHPlJ-PVcIlj-vjGT3BlbkFJfsPuNTWlMWV1qJciwgCvP4J8j4yPCurxQvBno-bVIA")
 
 logging.basicConfig(level=logging.DEBUG)
 
